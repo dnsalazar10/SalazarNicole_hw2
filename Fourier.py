@@ -1,6 +1,7 @@
 import matplotlib.pylab as plt
 import numpy as np
 
+#### Punto 1 ####
 #Almacena los datos de signal.dat y signalSuma.dat. La columna 1 es el tiempo y la columna 2 es la señal f(t).
 data1 = np.genfromtxt("signal.dat", delimiter='')
 t=data1[:,0]
@@ -10,6 +11,7 @@ data2 = np.genfromtxt("signalSuma.dat", delimiter='')
 t2=data2[:,0]
 f2=data2[:,1]
 
+#### Punto 2 ####
 #Gráficas de las señales
 fig = plt.figure()
 x1 = fig.add_subplot(221)
@@ -24,6 +26,7 @@ plt.title('Signal Suma')
 plt.xlabel('time(t)')
 plt.show()
 
+#### Punto 3 ####
 #Metodo de Fourier
 def fourier(y,N):
     n = len(y)
@@ -39,7 +42,8 @@ fou=fourier(f,N)
 dt=t[1]-t[0]
 freq=np.fft.fftfreq(N, dt)
 
-##Grafica de la transformada de Fourier de signal.dat
+#### Punto 4 ####
+#Grafica de la transformada de Fourier de signal.dat
 fig = plt.figure()
 t1 = fig.add_subplot(221)
 t1.plot(freq,fou)
@@ -92,7 +96,7 @@ inversa=np.fft.ifft(F3)
 F4=pasa_bajos(fou2,freq,400)
 inversa2=np.fft.ifft(F4)
 
-##Grafica de la señal inicial y la señal filtrada de signal.dat
+#Grafica de la señal inicial y la señal filtrada de signal.dat
 fig = plt.figure()
 s1 = fig.add_subplot(221)
 s1.plot(t,f,'g')
@@ -100,10 +104,36 @@ s1.plot(t,inversa,'m')
 plt.xlabel('time(t)')
 plt.ylabel('f(t)')
 
-##Grafica de la señal inicial y la señal filtrada de signalSuma.dat
+#Grafica de la señal inicial y la señal filtrada de signalSuma.dat
 s2 = fig.add_subplot(222)
 s2.plot(t,f2,'g', label="Señal inicial")
 s2.plot(t,inversa2,'m', label="Señal filtrada")
 plt.xlabel('time(t)')
 plt.legend()
 plt.show()
+
+#### Punto 5 ####
+# Plot de la señal signal.dat
+Frequency = 450
+plt.subplot(221)
+plt.plot(t,f)
+plt.xlabel('Sample')
+plt.ylabel('Amplitude')
+plt.title('Signal')
+
+# Plot de la señal signalSuma.dat
+plt.subplot(222)
+plt.plot(t,f2)
+plt.xlabel('Sample')
+plt.title('Signal Suma')
+
+# Plot del spectrograma
+plt.subplot(223)
+powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(f, Fs=Frequency)
+plt.xlabel('Time(t)')
+plt.ylabel('Frequency')
+
+# Plot del spectrograma
+plt.subplot(224)
+powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(f2, Fs=Frequency)
+plt.xlabel('Time(t)')
