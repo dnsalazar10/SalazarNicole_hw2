@@ -12,14 +12,14 @@ f2=data2[:,1]
 
 #Gráficas de las señales
 fig = plt.figure()
-ax1 = fig.add_subplot(221)
-ax1.plot(t,f,'orange')
+x1 = fig.add_subplot(221)
+x1.plot(t,f,'g')
 plt.title('Signal')
 plt.xlabel('time(t)')
 plt.ylabel('f(t)')
 
-ax2 = fig.add_subplot(222)
-ax2.plot(t2,f2,'orange')
+x2 = fig.add_subplot(222)
+x2.plot(t,f2,'g')
 plt.title('Signal Suma')
 plt.xlabel('time(t)')
 plt.show()
@@ -38,6 +38,7 @@ N=len(t)
 fou=fourier(f,N)
 dt=t[1]-t[0]
 freq=np.fft.fftfreq(N, dt)
+
 ##Grafica de la transformada de Fourier de signal.dat
 fig = plt.figure()
 t1 = fig.add_subplot(221)
@@ -47,13 +48,62 @@ plt.xlabel('Frecuencias')
 plt.ylabel('Fourier')
 
 #Datos de signalSuma.dat
-N2=len(t2)
-fou2=fourier(f2,N2)
-dt2=t2[1]-t2[0]
-freq2=np.fft.fftfreq(N2, dt2)
 ##Grafica de la transformada de Fourier de signalSuma.dat
 t2 = fig.add_subplot(222)
-t2.plot(freq2,fou2)
+fou2=fourier(f2,N)
+t2.plot(freq,fou2)
 plt.title('Transformada Signal Suma')
 plt.xlabel('Frecuencias')
+plt.show()
+
+#Tres frecuencias principales de su señal.
+def freq_max(FR,FR2):
+    freq_max=[]
+    F_max=[]
+    for i in range(6):
+        index=list(FR).index(max(FR2))
+        if freq[index]>0:
+            F_max.append(FR[index])
+            freq_max.append(freq[index])
+        FR2[index]=0
+
+    print("Las frecuencias principales de la señal son:",freq_max)
+
+#Frecuencia signal.dat
+FR=np.sqrt(np.real(fou)**2+np.imag(fou)**2)
+FR2=FR
+print(freq_max(FR,FR2))
+#Frecuencia signalSuma.dat
+FR2=np.sqrt(np.real(fou2)**2+np.imag(fou2)**2)
+FR4=FR2
+print(freq_max(FR2,FR4))
+
+#Filtro pasa bajos que le permita filtrar el ruido de la senial del punto 1
+def pasa_bajos(T,freq,corte):
+    filtro=np.copy(T)
+    for i in range(len(T)):
+        if abs(freq[i])>corte:
+            filtro[i]=0
+    return filtro
+
+F3=pasa_bajos(fou,freq,400)
+inversa=np.fft.ifft(F3)
+
+F4=pasa_bajos(fou2,freq,400)
+inversa2=np.fft.ifft(F4)
+
+##Grafica de la señal inicial y la señal filtrada de signal.dat
+fig = plt.figure()
+s1 = fig.add_subplot(221)
+s1.plot(t,f,'g')
+s1.plot(t,inversa,'m')
+plt.xlabel('time(t)')
+plt.ylabel('f(t)')
+
+##Grafica de la señal inicial y la señal filtrada de signalSuma.dat
+s2 = fig.add_subplot(222)
+s2.plot(t,f2,'g', label="Señal inicial")
+s2.plot(t,inversa2,'m', label="Señal filtrada")
+plt.xlabel('time(t)')
+plt.legend()
 plt.show()
