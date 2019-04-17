@@ -155,3 +155,32 @@ plt.ylabel('f(t)')
 plt.title('Temblor')
 plt.plot(range(12))
 plt.show()
+
+N3=len(x)
+fou3=np.fft.fft(y)
+dt3=x[1]-x[0]
+freq3=np.fft.fftfreq(N3, dt3)
+
+#### Punto 8 ####
+#Plot de transformada de Fourier del temblor
+plt.plot(freq3,fou3)
+plt.title('Transformada')
+plt.xlabel('Frecuencias')
+plt.ylabel('Fourier')
+plt.show()
+
+Frequency = 0.05
+
+# Plot de la señal signalSuma.dat
+plt.subplot(211)
+plt.plot(x,y)
+plt.ylabel('Amplitud')
+plt.title('Temblor')
+
+#### Punto 9 ####
+# Plot del spectrograma
+plt.subplot(212)
+powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(y, Fs=Frequency)
+plt.xlabel('Time(t)')
+plt.ylabel('Frequency')
+plt.show()
