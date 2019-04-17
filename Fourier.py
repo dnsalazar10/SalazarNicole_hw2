@@ -110,6 +110,7 @@ s2.plot(t,f2,'g', label="Señal inicial")
 s2.plot(t,inversa2,'m', label="Señal filtrada")
 plt.xlabel('time(t)')
 plt.legend()
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 plt.show()
 
 #### Punto 5 ####
@@ -137,3 +138,20 @@ plt.ylabel('Frequency')
 plt.subplot(224)
 powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(f2, Fs=Frequency)
 plt.xlabel('Time(t)')
+plt.show()
+
+#### Punto 6 ####
+#Almacena los datos de un temblor real
+temblor = np.genfromtxt("temblor.txt")
+x=np.linspace(0,90001, 90001)
+y=temblor[:]
+
+#### Punto 7 ####
+#Grafica la señal de un temblor real en función del tiempo
+plt.figure()
+plt.plot(x,y)
+plt.xlabel('time(t)')
+plt.ylabel('f(t)')
+plt.title('Temblor')
+plt.plot(range(12))
+plt.show()
