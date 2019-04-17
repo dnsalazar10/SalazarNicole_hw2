@@ -72,11 +72,11 @@ def freq_max(FR,FR2):
 #Frecuencia signal.dat
 FR=np.sqrt(np.real(fou)**2+np.imag(fou)**2)
 FR2=FR
-print(freq_max(FR,FR2))
+freq_max(FR,FR2)
 #Frecuencia signalSuma.dat
 FR2=np.sqrt(np.real(fou2)**2+np.imag(fou2)**2)
 FR4=FR2
-print(freq_max(FR2,FR4))
+freq_max(FR2,FR4)
 
 #Filtro pasa bajos que le permita filtrar el ruido de la senial del punto 1
 def pasa_bajos(T,freq,corte):
