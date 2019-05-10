@@ -1,20 +1,5 @@
 /*
 *   TAREA 2 METODOS
-*       Solución de la ecuación diferentcial x''(t)+w2*x(t)==0 mediante RK4
-*
-*   Para esto se divide la ecuación en un sistema de dos ecuaciones:
-*                              x'(t)=v(t)                 (1)
-*                            v'(t)=-w2*x(t)               (2)
-*
-*    Se usará RK2 para resolver (2) con valor inicial v(0)=v0 y luego para resolver
-*    (1) con valor inicial x(0)=x0, iterativamente.
-*
-*    Sin embargo, el método está diseñado para solucionar cualesquiera sistemas de
-*    ecuaciones (1) y (2), siempre que estas sean de la forma:
-*
-*                             x'(t)=f1(t,v)               (1)
-*                             v'(t)=f2(t,x)               (2)
-*
 */
 
 #include <iostream>
