@@ -9,3 +9,10 @@ TransformadasSenales.png:Fourier.py
 
 EspectrogramaSenales.png:Fourier.py
 	python Fourier.py
+
+amplitud1.png:Plotws_hw2.py edificio.txt
+	python Plotws_hw2.py
+
+edificio.txt: edificio.cpp
+	g++ edificio.cpp
+	./a.out
