@@ -24,7 +24,7 @@ x2 = fig.add_subplot(222)
 x2.plot(t,f2,'g')
 plt.title('Signal Suma')
 plt.xlabel('time(t)')
-
+plt.show()
 
 #### Punto 3 ####
 #Metodo de Fourier
@@ -58,16 +58,7 @@ fou2=fourier(f2,N)
 t2.plot(freq,fou2)
 plt.title('Transformada Signal Suma')
 plt.xlabel('Frecuencias')
-
-##Suma de transformadas
-plt.figure()
-plt.plot(freq,fou,"orange")
-plt.title('Suma de transformadas')
-plt.xlabel('Frecuencias')
-plt.ylabel('Fourier')
-plt.plot(freq,fou2,'blue')
-plt.title('Transformada Signal Suma')
-plt.xlabel('Frecuencias')
+plt.show()
 
 #Tres frecuencias principales de su señal.
 def freq_max(FR,FR2):
@@ -120,7 +111,7 @@ s2.plot(t,inversa2,'m', label="Señal filtrada")
 plt.xlabel('time(t)')
 plt.legend()
 plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-
+plt.show()
 
 #### Punto 5 ####
 # Plot de la señal signal.dat
@@ -147,7 +138,7 @@ plt.ylabel('Frequency')
 plt.subplot(224)
 powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(f2, Fs=Frequency)
 plt.xlabel('Time(t)')
-
+plt.show()
 
 #### Punto 6 ####
 #Almacena los datos de un temblor real
@@ -163,7 +154,7 @@ plt.xlabel('time(t)')
 plt.ylabel('f(t)')
 plt.title('Temblor')
 plt.plot(range(12))
-
+plt.show()
 
 N3=len(x)
 fou3=np.fft.fft(y)
@@ -176,7 +167,7 @@ plt.plot(freq3,fou3)
 plt.title('Transformada')
 plt.xlabel('Frecuencias')
 plt.ylabel('Fourier')
-
+plt.show()
 
 Frequency = 0.05
 
