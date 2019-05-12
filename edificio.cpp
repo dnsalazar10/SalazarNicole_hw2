@@ -1,101 +1,69 @@
-/*
-*   TAREA 2 METODOS
-*       Solución de la ecuación diferentcial x''(t)+w2*x(t)==0 mediante RK4
-*
-*   Para esto se divide la ecuación en un sistema de dos ecuaciones:
-*                              x'(t)=v(t)                 (1)
-*                            v'(t)=-w2*x(t)               (2)
-*
-*    Se usará RK2 para resolver (2) con valor inicial v(0)=v0 y luego para resolver
-*    (1) con valor inicial x(0)=x0, iterativamente.
-*
-*    Sin embargo, el método está diseñado para solucionar cualesquiera sistemas de
-*    ecuaciones (1) y (2), siempre que estas sean de la forma:
-*
-*                             x'(t)=f1(t,v)               (1)
-*                             v'(t)=f2(t,x)               (2)
-*
-*/
+/*Tarea 2 métodos computacionales. Punto 2
+  EDO: Un edificio en un sismo*/
 
 #include <iostream>
 #include <fstream>
 #include <math.h>
 
-using namespace std;
+double m=1000.0; //Masa de cada piso
+double k=2000.0; //Cte de rigidez de la estructura
+double y=0; //gamma, coeficiente de yción
+double w=1.0*sqrt(k/m);
+double dt=0.01;
+double t_fin=10.0; //tiempo final del sistema
+int n = int(t_fin/dt); //Numero de puntos
 
-double x0,v0,w2,tmax,dt;
-double m=1000.0;
-double y=0.0;
-double k=2000;
-double w0=sqrt((k/m));
-int tsize;
+double *u1 = NULL,*u2 = NULL, *u3 = NULL, *v1 = NULL,*v2, *v3 = NULL;
 
-//Función 1: F(t) = sin(ωt)
-double eq1(double t_,double v_)
+//Ecuación 1: F(t) = sin(ωt)
+double F( double w, double t )
 {
-	return sin(v_);
-}
-//Función 2: ω = 1.0*􏰀(k/m)
-double eq2(double t_,double x_)
-{
-	return -w0*x_;
+    return sin(w*t);
 }
 
-//Implementación de los K de la función Runge Kutta
-double k1( double t_, double arg, double(*f)(double,double) )
-{
-	return dt*f(t_,arg);
+//Sistema de ecuaciones diferenciales de segundo orden que describen el sismo
+double d2u1(int i, double w){
+    return (1/m)*(-y*v1[i] -2*k*u1[i] + k*u2[i] + F(w,dt*i));
 }
-double k2( double t_, double arg, double(*f)(double,double), double K )
+double d2u2(int i)
 {
-	return dt*f(t_+dt/2,arg+K/2);
+    return (1/m)*(-y*v2[i]+k*u1[i]-2*k*u2[i]+k*u3[i]);
 }
-double k3( double t_, double arg, double(*f)(double,double), double K )
+double d2u3(int i)
 {
-	return dt*f(t_+dt/2,arg+K/2);
-}
-double k4( double t_, double arg, double(*f)(double,double), double K )
-{
-	return dt*f(t_+dt,arg+K);
+    return (1/m)*(-y*v3[i]+k*u2[i]-k*u3[i]);
 }
 
-//Función de Runge-Kutta
-double RungeKuttaIncrement(double t_, double arg, double(*f)(double,double) )
-{
-	double K1=k1(t_,arg,f);
-	double K2=k2(t_,arg,f,K1);
-	double K3=k3(t_,arg,f,K2);
-	double K4=k4(t_,arg,f,K3);
-	return (1./6.)*(K1+2*K2+2*K3+K4);
-}
+int main(){
+    u1  = new double[n];
+    u2  = new double[n];
+    u3  = new double[n];
+    v1  = new double[n];
+    v2  = new double[n];
+    v3  = new double[n];
+
+    u1[0] = 0;
+    u2[0] = 0;
+    u3[0] = 0;
+    v1[0] = 0;
+    v2[0] = 0;
+    v3[0] = 0;
 
 
-int main()
-{
-	x0=1; w2=3; v0=-1; tmax=50; dt=0.01; tsize=(int)tmax/dt+1;   // definiciones
-	double t[tsize]; t[0]=0;
-	double v[tsize]; v[0]=v0;
-	double x[tsize]; x[0]=x0;
+    //Método de LeapFrog
+    for(int i=1; i<n; i++){
+        double v11 = v1[i-1]+d2u1(i-1, w)*dt/2;
+        double v22 = v2[i-1]+d2u2(i-1)*dt/2;
+        double v33 = v3[i-1]+d2u3(i-1)*dt/2;
 
-	// Abre docuemento en el que se almacenarán los datos
-  std::ofstream outfile ("edificio.txt");
+        u1[i] = u1[i-1] + v11*dt;
+        u2[i] = u2[i-1] + v22*dt;
+        u3[i] = u3[i-1] + v33*dt;
 
-	//cout << RungeKuttaIncrement(x[0],eq2) << endl << RungeKuttaIncrement(v[0],eq1) << endl;
+        v1[i] = v11+d2u1(i,w)*(dt/2);
+        v2[i] = v22+d2u2(i)*(dt/2);
+        v3[i] = v33+d2u3(i)*(dt/2);
+    }
 
-
-	for(int i=1;i<tsize;i++)
-	{
-		v[i]=v[i-1]+RungeKuttaIncrement(t[i-1],x[i-1],eq2);  // Solucionar un paso para la ecuación (2)
-		x[i]=x[i-1]+RungeKuttaIncrement(t[i-1],v[i],eq1);  // Solucionar un paso para la ecuación (1)
-		t[i]=t[i-1]+dt; // llevar la cuenta del tiempo
-	}
-
-	for(int i=0;i<tsize;i++)
-	{
-		outfile << t[i] << " " << x[i] << endl;
-	}
-
-	std::cout << std::endl << "Condiciones iniciales (Caso 1) almacenadas en edificio.txt  " << std::endl;
-	outfile.close ();
-
+    return 0;
 }
