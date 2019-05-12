@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 /*Tarea 2 métodos computacionales. Punto 2
   EDO: Un edificio en un sismo*/
+=======
+/*
+*   TAREA 2 METODOS
+*/
+>>>>>>> b5b4b650952910833c596410b8fcada37410b6ea
 
 #include <iostream>
 #include <fstream>
